@@ -1,0 +1,15 @@
+{
+  "name": "harvest-sync",
+  "version": "1.0.0",
+  "description": "Sync time between two different Harvest accounts",
+  "author": "Karl Söderström <karl@karlsoderstrom.com>",
+  "main": "index.js",
+  "license": "MIT",
+  "dependencies": {
+    "node-harvest-api": "^1.0.6"
+  },
+  "scripts": {
+    "start": "node index.js"
+  },
+  "type": "module"
+}

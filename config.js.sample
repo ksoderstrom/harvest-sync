@@ -1,0 +1,14 @@
+const config = {
+  appName: 'HarvestSync',
+  
+  sourceAccountId: 1234,
+  sourceToken: 'token123',
+  sourceProjectId: 1234,
+
+  targetAccountId: 1234,
+  targetToken: 'token123',
+  targetProjectId: 1234,
+  targetTaskId: 1234,
+};
+
+export default config;
