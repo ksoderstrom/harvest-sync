@@ -1,5 +1,8 @@
 import Harvest from 'node-harvest-api';
 import config from './config.js';
+import chalk from 'chalk';
+import Promise from 'bluebird';
+import Spinners from 'spinnies';
 
 const buildPermalink = (company, timeEntry) => {
   return `${company.base_uri}/time/day/${timeEntry.spent_date.replace(/-/g, '/')}/${timeEntry.id}`;
@@ -16,19 +19,24 @@ const entries = await source.time_entries.get({
   from: (new Date(new Date() - 30 * 24 * 60 * 60 * 1000)).toISOString().split('T')[0], // 30 days back
 });
 
-for (const entry of entries) {
-  console.log(`Syncing time for ${entry.spent_date}: ${entry.hours} hours`)
+const spinnies = new Spinners();
+
+Promise.map(entries, async entry => {
+  spinnies.add(`entry_${entry.id}`, {
+    text: chalk`Syncing time for {keyword("chocolate") ${entry.spent_date}} {gray (${entry.hours} hours)}`,
+  });
 
   const syncedEntry = (await target.time_entries.get({
     external_reference_id: entry.id,
   }))[0];
 
+  let res;
   if (syncedEntry) {
-    await target.time_entries.update(syncedEntry.id, {
+    res = await target.time_entries.update(syncedEntry.id, {
       hours: entry.hours,
     });
   } else {
-    await target.time_entries.create({
+    res = await target.time_entries.create({
       project_id: config.targetProjectId,
       task_id: config.targetTaskId,
       spent_date: entry.spent_date,
@@ -40,4 +48,10 @@ for (const entry of entries) {
       },
     });
   }
-}
+
+  if(res.message) {
+    spinnies.fail(`entry_${entry.id}`, {text: chalk`{redBright ${res.message}}`});
+  } else {
+    spinnies.succeed(`entry_${entry.id}`);
+  }
+}, {concurrency: 10});
