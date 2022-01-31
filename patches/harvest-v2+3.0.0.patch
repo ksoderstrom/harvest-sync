@@ -1,0 +1,12 @@
+diff --git a/node_modules/harvest-v2/src/mixins/ListFilterBase.js b/node_modules/harvest-v2/src/mixins/ListFilterBase.js
+index cbcf570..d05489b 100644
+--- a/node_modules/harvest-v2/src/mixins/ListFilterBase.js
++++ b/node_modules/harvest-v2/src/mixins/ListFilterBase.js
+@@ -1,6 +1,6 @@
+ const fetch = require('node-fetch');
+ 
+-const listParams = ['user_id', 'client_id', 'project_id', 'is_billed', 'is_running', 'updated_since', 'from', 'to', 'page', 'per_page', 'is_active'];
++const listParams = ['user_id', 'client_id', 'project_id', 'is_billed', 'is_running', 'updated_since', 'from', 'to', 'page', 'per_page', 'is_active', 'external_reference_id'];
+ 
+ const listFilterBase = {
+ 
